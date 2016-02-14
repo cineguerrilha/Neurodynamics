@@ -17,8 +17,8 @@ srate=1000;
 %% Define the Amplitude- and Phase- Frequencies
 
 
-PhaseFreqVector=1:2:20;
-AmpFreqVector=10:5:100;
+PhaseFreqVector=0:1:20;
+AmpFreqVector=10:5:200;
 
 PhaseFreq_BandWidth=4;
 AmpFreq_BandWidth=10;

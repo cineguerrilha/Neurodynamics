@@ -16,11 +16,11 @@ AA(1).date
 IntFName='Animal_M5_95minAfter_salina_151123_220909.int' %AA(3).name
 
 %%
-filename=AA(2).name
+filename=AA(1).name
 obj=VideoReader(filename);
 
 %%
-Video=rgb2gray(read(obj,15));
+Video=rgb2gray(read(obj,25));
 imagesc((255-Video));
 colorbar;
 colormap('jet');
@@ -69,7 +69,7 @@ mask=~mask;
 %Here you set up the detection level
 
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.29;   %Change this to isolate the mouse
+level = 0.085;   %Change this to isolate the mouse
 NoPixel=700;  %here also
 
 video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
@@ -144,7 +144,7 @@ for ii=1:obj.NumberOfFrames
 end
 
 plot(Coord(:,1),Coord(:,2))
-save([filename(1:end-4),'_Coord','Coord');
+save([filename(1:end-4),'_Coord'],'Coord');
 %%
 % Calculates the velocity
 % 
