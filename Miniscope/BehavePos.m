@@ -51,8 +51,8 @@ Video=rgb2gray(read(obj,1));
 %Here you set up the detection level
 
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.35;   %Change this to isolate the mouse
-NoPixel=1200;  %here also
+level = 0.34;   %Change this to isolate the mouse
+NoPixel=1000;  %here also
 
 video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
 bw = not(im2bw(video,level));
@@ -74,7 +74,10 @@ DistThr=60;
 cnt=1;
 clear Coord
 
-for kk=1:FileNo
+FileStart = 1;
+FileNo = 13; % Use only specified files
+
+for kk=FileStart:FileNo
     kk
     filename=['behavCam',int2str(kk),'.avi']
     obj=VideoReader(filename);
@@ -129,9 +132,21 @@ end
 BehaveCam=1;
 A=importdata('timestamp.dat');
 time=A.data(A.data(:,1)==BehaveCam,3);
-time(1)=0;
+time=time(((FileStart-1)*1000)+1:(FileNo*1000));
+%time(1)=0;
 
-save Coord Coord D time
+MiniscopeCam=0;
+timeMiniscope=A.data(A.data(:,1)==MiniscopeCam,3);
+timeMiniscope(1)=0;
+
+TStart = find(timeMiniscope<time(1));
+TEnd = find(timeMiniscope<time(end));
+timeMiniscope=timeMiniscope(TStart(end):TEnd(end));
+
+timeSpaced=(TStart(end)):30:(TEnd(end));
+
+
+save Coord_File1_File7 Coord D time
 %%
 % Calculates the velocity
 % 

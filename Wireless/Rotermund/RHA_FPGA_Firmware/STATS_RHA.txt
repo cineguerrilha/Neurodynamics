@@ -1,0 +1,11 @@
+Compile report:
+===============
+
+    CORE                       Used:   5859  Total:   6144   (95.36%)
+    IO (W/ clocks)             Used:     38  Total:     68   (55.88%)
+    GLOBAL (Chip+Quadrant)     Used:      6  Total:     18   (33.33%)
+    PLL                        Used:      0  Total:      1   (0.00%)
+    RAM/FIFO                   Used:      8  Total:      8   (100.00%)
+    Low Static ICC             Used:      0  Total:      1   (0.00%)
+    FlashROM                   Used:      0  Total:      1   (0.00%)
+    User JTAG                  Used:      0  Total:      1   (0.00%)

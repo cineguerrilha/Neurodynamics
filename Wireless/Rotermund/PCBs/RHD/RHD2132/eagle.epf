@@ -1,0 +1,26 @@
+[Eagle]
+Version="05 11 00"
+Platform="Linux"
+Serial="6F01A73F09-LSR-WLM-1EP"
+Globals="Globals"
+Desktop="Desktop"
+
+[Globals]
+AutoSaveProject=1
+UsedLibrary="/opt/eagle-5.11.0/lbr/rcl.lbr"
+UsedLibrary="/home/davrot/eagle/Basestation/mylibs.lbr"
+UsedLibrary="/home/davrot/eagle/Basestation/mypowerlib.lbr"
+UsedLibrary="/home/davrot/eagle/Kombi_Spiegel/ASIC_BarDie_2.lbr"
+UsedLibrary="/home/davrot/eagle/Kombi_Spiegel/Elektroden.lbr"
+UsedLibrary="/home/davrot/eagle/Kombi/ASIC_BarDie_2.lbr"
+UsedLibrary="RHD2132_QFN.lbr"
+
+[Win_1]
+Type="Control Panel"
+Loc="0 0 1049 651"
+State=2
+Number=0
+
+[Desktop]
+Screen="3360 1050"
+Window="Win_1"

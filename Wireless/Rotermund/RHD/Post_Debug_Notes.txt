@@ -1,0 +1,6 @@
+Ideas concerning the problems listed in TEST_RHD.sh
+1.) While debugging the RHA source code, I noticed a missing reset value in [RHA_TO_ZL_CONVERTER.vhd] in the process FSM_BLOCK PROCESS:
+SPIMACHINE_STATE <= SM_IDLE;
+This could be the cause of the extra 00000000 in the begining after the Zarlink connection was created.
+2.) I changed the [RHA_TO_ZL_CONVERTER.vhd] and [RHA_Array.vhd] in the RHA case from polling to fall - through. Maybe it is a good idea to do this for the RHD too...
+ 
