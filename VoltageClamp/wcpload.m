@@ -1,5 +1,8 @@
 function [d,t,Header]=wcpload(FName)
 
+mV=1;
+pA=2;
+
 Fid = fopen(FName,'r');
 Version = fread(Fid,[1,1024],'char');
 
@@ -12,16 +15,24 @@ if (length(l10)==length(l13))
     cnt=1;
     for ii=1:length(l13)
         Str=char(Version(cnt:l13(ii)));
+        Str = strrep(Str,',','.');
+        Str = strrep(Str,'RTIME=','RTIME=0');
         Header{ii} = cellstr(Str);
+        disp([int2str(ii),' --> ',char(Header{ii})]);
         cnt = l13(ii)+2;
     end
 end
 
+eval(char(Header{4}))
+eval(char(Header{5}))
 eval(char(Header{6}))
 eval(char(Header{7}))
+eval(char(Header{8}))
+eval(char(Header{9}))
 eval(char(Header{10}))
 eval(char(Header{11}))
 eval(char(Header{12}))
+eval(char(Header{13}))
 
 clear Header
 
@@ -39,6 +50,8 @@ if (length(l10)==length(l13))
     cnt=1;
     for ii=1:length(l13)
         Str=char(Version(cnt:l13(ii)));
+        Str = strrep(Str,',','.');
+        Str = strrep(Str,'RTIME=','RTIME=0');
         Header{ii} = cellstr(Str);
         cnt = l13(ii)+2;
     end

@@ -1,5 +1,4 @@
 
-%%
 % Image tracking
 % Reads the first frame
 AA=dir('*.mp4');
@@ -9,11 +8,6 @@ AA=dir('*.mp4');
 disp('Dates')
 
 AA(1).date
-
-%%
-%filename='chr_sess2.avi' %AA(1).name
-
-IntFName='Animal_M5_95minAfter_salina_151123_220909.int' %AA(3).name
 
 %%
 filename=AA(1).name
@@ -69,7 +63,7 @@ mask=~mask;
 %Here you set up the detection level
 
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.085;   %Change this to isolate the mouse
+level = 0.1;   %Change this to isolate the mouse
 NoPixel=700;  %here also
 
 video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
