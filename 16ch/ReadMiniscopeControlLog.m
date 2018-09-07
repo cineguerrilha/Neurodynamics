@@ -8,14 +8,16 @@ fileID = fopen(fname);
 a=fread(fileID,250,'char');
 EoS=find(a==10);
 EndOfString=EoS(1);
-EndOfNumSample=EoS(2);
+%EndOfNumSample=EoS(2);
+disp('Channel names');
+disp(char(a(1:EndOfString-2)'));
+
 S1=(char(a(EndOfString+1:EndOfNumSample-2)))';
 
 ChannelNo=length(find(a(1:EndOfString)==9));
 NumSamples = str2double(S1);
 disp(['The file contains ',S1,' in ',int2str(ChannelNo),' channels']);
-disp('Channel names');
-disp(char(a(1:EndOfString-2)'));
+
 if a(EndOfString-1)~=13
     disp('Problem finding the end of the string, data may be corrupted')
 end

@@ -1,4 +1,4 @@
-IntFName='Animal_M1_Salina_60minAfter_151126_210840.int';
+IntFName='som_180616_214322.int';
 [t,amps,y,aux] = read_intan_data_leao(IntFName);
 
 %%
@@ -6,6 +6,7 @@ IntFName='Animal_M1_Salina_60minAfter_151126_210840.int';
 data1000=double(y(:,1:25:end));
 
 %%
+h1=figure(1);
 % Calculate PSD for all channels
 for ii=1:16
     [p(:,ii)  f]=pwelch(detrend(data1000(ii,:)),4000,3000,2^17,1000);
@@ -13,6 +14,8 @@ for ii=1:16
     xlim([3 12])
 end
 
+savefig(h1,[IntFName(1:end-4),'_PSD.fig'])
+save([IntFName(1:end-4),'_PSD'],'data1000','p','f');
 %%
 % Hilbert for 2 thetas all channels
 for ii=1:16

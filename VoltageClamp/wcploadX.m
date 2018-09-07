@@ -1,8 +1,8 @@
-function [d,t,Header]=wcpload(FName)
+function [d,t,Header]=wcploadX(FName)
 
 mV=1;
 pA=2;
-%NR=1;
+NR=1;
 
 Fid = fopen(FName,'r');
 Version = fread(Fid,[1,1024],'char');
@@ -24,6 +24,7 @@ if (length(l10)==length(l13))
     end
 end
 
+eval(char(Header{3}))
 eval(char(Header{4}))
 eval(char(Header{5}))
 eval(char(Header{6}))
@@ -41,7 +42,7 @@ fclose(Fid);
 
 Fid = fopen(FName,'r');
 
-HeaderSize = ((round(NC-1)/8)+1)*1024;
+HeaderSize = ((round(NC-1)/8)+1)*1024
 
 Version = fread(Fid,[1,HeaderSize],'char');
 l10=find(Version==10); % newline (\n)
@@ -88,7 +89,7 @@ for ii=1:NC
     dd=Data(NC:ii:end);
     dd=reshape(dd,[length(dd)/NR,NR]);
     dd=dd(Offset:end,:);
-    eval(['Gain=YG',int2str(ii-1)]);
+    eval(['Gain=YCF',int2str(ii-1)]);
 
 d(ii).Ch=dd*(1/(ADCMAX*Gain));
 g=length(dd);

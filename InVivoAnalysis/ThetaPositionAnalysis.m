@@ -63,8 +63,8 @@ mask=~mask;
 %Here you set up the detection level
 
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.1;   %Change this to isolate the mouse
-NoPixel=700;  %here also
+level = 0.15;   %Change this to isolate the mouse
+NoPixel=300;  %here also
 
 video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
 bw = not(im2bw(video,level));
@@ -78,11 +78,12 @@ plot(Coord(1),Coord(2),'go')
 hold off
 
 %%
-Coord=zeros(obj.NumberOfFrames,2);
-
+%Coord=zeros(obj.NumberOfFrames,2);
+Coord=zeros(20000,2);
 DistThr=60;
 
-for ii=1:obj.NumberOfFrames
+%for ii=1:obj.NumberOfFrames
+    for ii=1:20000
     Video=rgb2gray(read(obj,ii));
     video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
     % apply polygon

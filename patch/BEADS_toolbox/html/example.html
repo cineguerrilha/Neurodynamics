@@ -1,0 +1,256 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Example: Chromatograms BEADS (Baseline Estimation And Denoising with Sparsity)</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-10-27"><meta name="DC.source" content="example.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Example: Chromatograms BEADS (Baseline Estimation And Denoising with Sparsity)</h1><!--introduction--><p>This example illustrates the use of BEADS to estimate and remove the baseline of chromatogram series.</p><p>Reference: 'BEADS: Joint baseline estimation and denoising of chromatograms using sparse derivatives'</p><p>Xiaoran Ning, Ivan Selesnick, Polytechnic School of Engineering, New York University, Brooklyn, NY, USA</p><p>Laurent Duval, IFP Energies nouvelles, Technology Division, Rueil-Malmaison, France, Universite Paris-Est, LIGM, ESIEE Paris, France</p><p>2014</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Start</a></li><li><a href="#2">Load data</a></li><li><a href="#3">Run the BEADS algorithm</a></li><li><a href="#4">Display the output of BEADS</a></li><li><a href="#5">Display cost function history</a></li></ul></div><h2>Start<a name="1"></a></h2><pre class="codeinput">clear <span class="string">all</span>
+addpath <span class="string">data</span>
+
+load <span class="string">data/noise.mat</span>;
+load <span class="string">data/chromatograms.mat</span>;
+
+whos
+</pre><pre class="codeoutput">  Name          Size             Bytes  Class     Attributes
+
+  X          4000x8             256000  double              
+  noise      4000x1              32000  double              
+
+</pre><h2>Load data<a name="2"></a></h2><pre class="codeinput"><span class="comment">% Load data and add noise.</span>
+
+y = X(:, 3) + noise * 0.5;
+
+N = length(y);
+</pre><h2>Run the BEADS algorithm<a name="3"></a></h2><pre class="codeinput"><span class="comment">% Filter parameters</span>
+fc = 0.006;     <span class="comment">% fc : cut-off frequency (cycles/sample)</span>
+d = 1;          <span class="comment">% d : filter order parameter (d = 1 or 2)</span>
+
+<span class="comment">% Positivity bias (peaks are positive)</span>
+r = 6;          <span class="comment">% r : asymmetry parameter</span>
+
+<span class="comment">% Regularization parameters</span>
+amp = 0.8;
+lam0 = 0.5*amp;
+lam1 = 5*amp;
+lam2 = 4*amp;
+
+tic
+[x1, f1, cost] = beads(y, d, fc, r, lam0, lam1, lam2);
+toc
+</pre><pre class="codeoutput">Elapsed time is 0.222659 seconds.
+</pre><h2>Display the output of BEADS<a name="4"></a></h2><pre class="codeinput">ylim1 = [-50 200];
+xlim1 = [0 3800];
+
+figure(1)
+clf
+
+subplot(4, 1, 1)
+plot(y)
+title(<span class="string">'Data'</span>)
+xlim(xlim1)
+ylim(ylim1)
+set(gca,<span class="string">'ytick'</span>, ylim1)
+
+subplot(4, 1, 2)
+plot(y,<span class="string">'color'</span>, [1 1 1]*0.7)
+line(1:N, f1, <span class="string">'LineWidth'</span>, 1)
+legend(<span class="string">'Data'</span>, <span class="string">'Baseline'</span>)
+legend <span class="string">boxoff</span>
+title([<span class="string">'Baseline, as estimated by BEADS'</span>, <span class="string">' (r = '</span>, num2str(r), <span class="string">', fc = '</span>, num2str(fc), <span class="string">', d = '</span>, num2str(d),<span class="string">')'</span>])
+xlim(xlim1)
+ylim(ylim1)
+set(gca,<span class="string">'ytick'</span>, ylim1)
+
+subplot(4, 1, 3)
+plot(x1)
+title(<span class="string">'Baseline-corrected data'</span>)
+xlim(xlim1)
+ylim(ylim1)
+set(gca,<span class="string">'ytick'</span>, ylim1)
+
+
+subplot(4, 1, 4)
+plot(y - x1 - f1)
+title(<span class="string">'Residual'</span>)
+xlim(xlim1)
+ylim(ylim1)
+set(gca,<span class="string">'ytick'</span>, ylim1)
+
+orient <span class="string">tall</span>
+print <span class="string">-dpdf</span> <span class="string">example</span>
+</pre><img vspace="5" hspace="5" src="example_01.png" alt=""> <h2>Display cost function history<a name="5"></a></h2><pre class="codeinput">figure(2)
+clf
+plot(cost)
+xlabel(<span class="string">'iteration number'</span>)
+ylabel(<span class="string">'Cost function value'</span>)
+title(<span class="string">'Cost function history'</span>)
+</pre><img vspace="5" hspace="5" src="example_02.png" alt=""> <p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Example: Chromatograms BEADS (Baseline Estimation And Denoising with Sparsity)
+%
+% This example illustrates the use of BEADS to estimate and remove the
+% baseline of chromatogram series.
+%
+% Reference:
+% 'BEADS: Joint baseline estimation and denoising of chromatograms using
+% sparse derivatives'
+%
+% Xiaoran Ning, Ivan Selesnick,
+% Polytechnic School of Engineering, New York University, Brooklyn, NY, USA
+%
+% Laurent Duval,
+% IFP Energies nouvelles, Technology Division, Rueil-Malmaison, France,
+% Universite Paris-Est, LIGM, ESIEE Paris, France
+%
+% 2014
+
+%% Start
+
+clear all
+addpath data
+
+load data/noise.mat;
+load data/chromatograms.mat;
+
+whos
+
+%% Load data
+
+% Load data and add noise.
+
+y = X(:, 3) + noise * 0.5;
+
+N = length(y);
+
+%% Run the BEADS algorithm
+
+% Filter parameters
+fc = 0.006;     % fc : cut-off frequency (cycles/sample)
+d = 1;          % d : filter order parameter (d = 1 or 2)
+
+% Positivity bias (peaks are positive)
+r = 6;          % r : asymmetry parameter
+
+% Regularization parameters
+amp = 0.8;      
+lam0 = 0.5*amp;
+lam1 = 5*amp;
+lam2 = 4*amp;
+
+tic
+[x1, f1, cost] = beads(y, d, fc, r, lam0, lam1, lam2);
+toc
+
+%% Display the output of BEADS
+
+ylim1 = [-50 200];
+xlim1 = [0 3800];
+
+figure(1)
+clf
+
+subplot(4, 1, 1)
+plot(y)
+title('Data')
+xlim(xlim1)
+ylim(ylim1)
+set(gca,'ytick', ylim1)
+
+subplot(4, 1, 2)
+plot(y,'color', [1 1 1]*0.7)
+line(1:N, f1, 'LineWidth', 1)
+legend('Data', 'Baseline')
+legend boxoff
+title(['Baseline, as estimated by BEADS', ' (r = ', num2str(r), ', fc = ', num2str(fc), ', d = ', num2str(d),')'])
+xlim(xlim1)
+ylim(ylim1)
+set(gca,'ytick', ylim1)
+
+subplot(4, 1, 3)
+plot(x1)
+title('Baseline-corrected data')
+xlim(xlim1)
+ylim(ylim1)
+set(gca,'ytick', ylim1)
+
+
+subplot(4, 1, 4)
+plot(y - x1 - f1)
+title('Residual')
+xlim(xlim1)
+ylim(ylim1)
+set(gca,'ytick', ylim1)
+
+orient tall
+print -dpdf example
+
+%% Display cost function history
+
+figure(2)
+clf
+plot(cost)
+xlabel('iteration number')
+ylabel('Cost function value')
+title('Cost function history')
+
+##### SOURCE END #####
+--></body></html>

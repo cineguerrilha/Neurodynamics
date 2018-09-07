@@ -1,5 +1,5 @@
-function [amps, t, isi]=find_spikes(d,ti);
-
+function [amps, t, isi]=find_spikes(d,tt);
+isi=0;
 %time=(1:length(d))*(si);
 time=tt;
 
