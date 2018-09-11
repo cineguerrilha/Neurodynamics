@@ -112,7 +112,7 @@ title('Theta 2')
 
 %%
 % Calculate distance and speed
-FrameRate=15;
+FrameRate=20;
 CoorFName=[IntFName(1:end-4),'_Coord.mat'];
 load(CoorFName);
 D(1)=0;
