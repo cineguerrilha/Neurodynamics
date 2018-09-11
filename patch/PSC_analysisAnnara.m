@@ -1,13 +1,19 @@
 %% Run this if you have used edrloadAnnara
-[dd, h, EDRFile, EDRPath] = edrloadAnnara;
-d=dd(:,2);  % Check if the data is in channel
+%[dd, h, EDRFile, EDRPath] = edrloadAnnara;
+EDRPath=cd;
+A=dir('DMT*.EDR');
+gg=3;
+EDRFile=A(gg).name;
+[dd,t,Header,DT]=edrload_Leao(EDRFile);
+d=dd(:,1);  % Check if the data is in channel
 
 plot(d)
 
-si=h.DT;
-
+% si=h.DT;
+si=DT;
 % d=d(1:2:end);
 % si=si*2;
+EDRFile
 %%
 % IF YOUR SIGNAL HAS NO DRIFT
 % skip the cell bellow
@@ -114,7 +120,8 @@ plot(mean(SynEvents'),'r')
 hold off
 
 %[FileName,PathName,FilterIndex] = uiputfile;
-FileName=EDRFile(1:end-4);
+FileName=[EDRFile(1:end-4),'.mat'];
+h.DT=DT;
 save(FileName,'d','h','SynEvents','EDRPath','locs')
 
 %%
