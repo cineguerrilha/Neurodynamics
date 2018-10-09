@@ -21,7 +21,7 @@ for ii=1:length(tc)
     VFT1(ii,1)=mean(Cvf(fc>T1(1) & fc<T1(2),ii));
 end
 
-T2 = [4 7];
+T2 = [3 5];
 for ii=1:length(tc)
     DFT2(ii,1)=mean(Cdf(fc>T2(1) & fc<T2(2),ii));
     DVT2(ii,1)=mean(Cdv(fc>T2(1) & fc<T2(2),ii));
@@ -178,7 +178,7 @@ title('Ventral mPFC coherence - T2')
 [Cpv f]=mscohere(data1000(:,ChannelsReg(1)),data1000(:,ChannelsReg(2)),2000,1500,2^18,1000);
 [Cdv f]=mscohere(data1000(:,ChannelsReg(3)),data1000(:,ChannelsReg(2)),2000,1500,2^18,1000);
 
-ii=5;
+ii=3;
 
 Animal(ii).Cpd = Cpd;
 Animal(ii).Cpv = Cpv;
