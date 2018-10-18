@@ -3,7 +3,7 @@
 %Gray Coord
 %clear
 %close
-load Coord
+%load Coord
 
 %Coord= ___;
 %Coord=Coord(1:2:18010,:);

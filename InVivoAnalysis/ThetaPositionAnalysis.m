@@ -63,7 +63,7 @@ mask=~mask;
 %Here you set up the detection level
 
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.15;   %Change this to isolate the mouse
+level = 0.01;   %Change this to isolate the mouse
 NoPixel=300;  %here also
 
 video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
