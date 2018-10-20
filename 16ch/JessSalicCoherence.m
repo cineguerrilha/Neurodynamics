@@ -2,12 +2,13 @@
 PFC_ch = 4;
 VH_ch = 11;
 DH_ch = 1;
+[pks,locs]=findpeaks(aux1000);
 
 ChannelsReg = [PFC_ch VH_ch DH_ch];
 
-[Cdf,tc,fc]=ch_time(detrend(data1000(:,DH_ch)),detrend(data1000(:,PFC_ch)),2000,1500,[1 20],1000);
-[Cdv,tc,fc]=ch_time(detrend(data1000(:,DH_ch)),detrend(data1000(:,VH_ch)),2000,1500,[1 20],1000);
-[Cvf,tc,fc]=ch_time(detrend(data1000(:,VH_ch)),detrend(data1000(:,PFC_ch)),2000,1500,[1 20],1000);
+[Cdf,tc,fc]=ch_time(detrend(data1000(locs(1):locs(end)+50,DH_ch)),detrend(data1000(:,PFC_ch)),2000,1500,[1 20],1000);
+[Cdv,tc,fc]=ch_time(detrend(data1000(locs(1):locs(end)+50,DH_ch)),detrend(data1000(:,VH_ch)),2000,1500,[1 20],1000);
+[Cvf,tc,fc]=ch_time(detrend(data1000(locs(1):locs(end)+50,VH_ch)),detrend(data1000(:,PFC_ch)),2000,1500,[1 20],1000);
 
 save Coherence Cdf Cdv Cvf tc fc ChannelsReg
 
@@ -42,7 +43,7 @@ fps=1000/(locs(2)-locs(1));
 TCoord=round(locs);
 
 tc1000=tc*1000;
-Coord=Coord(1:length(TCoord),:);
+% Coord=Coord(1:length(TCoord),:);
 %%
 % Velocity
 V(1)=0;
@@ -66,10 +67,10 @@ Corner=50;
 DF=resample(smooth(DFT1,20),length(Coord),length(DFT1));
 DF=DF(Corner:end-Corner);
 
-    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),50,DF,'fill')
+    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),25,DF,'fill')
     colormap('jet')
     colorbar
-    caxis([0 1])
+    %caxis([0 1])
 
 %     hold on
 %     
@@ -86,10 +87,10 @@ DF=resample(smooth(DVT1,20),length(Coord),length(DVT1));
 
 DF=DF(Corner:end-Corner);
 
-    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),50,DF,'fill')
+    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),25,DF,'fill')
     colormap('jet')
     colorbar
-    caxis([0 1])
+    %caxis([0 1])
 
 title('Dorsal Ventral coherence')
 
@@ -99,10 +100,10 @@ DF=resample(smooth(VFT1,20),length(Coord),length(VFT1));
 
 DF=DF(Corner:end-Corner);
 
-    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),50,DF,'fill')
+    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),25,DF,'fill')
     colormap('jet')
     colorbar
-    caxis([0 1])
+    %caxis([0 1])
 
 title('Ventral mPFC coherence')
 
@@ -113,10 +114,10 @@ DF=V/max(V);
 
 DF=DF(Corner:end-Corner);
 
-    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),50,DF,'fill')
+    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),25,DF,'fill')
     colormap('jet')
     colorbar
-    caxis([0 1])
+%    caxis([0 1])
 
 title('Speed')
 
@@ -130,10 +131,10 @@ Corner=50;
 DF=resample(smooth(DFT2,20),length(Coord),length(DFT2));
 DF=DF(Corner:end-Corner);
 
-    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),50,DF,'fill')
+    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),25,DF,'fill')
     colormap('jet')
     colorbar
-    caxis([0 1])
+    %caxis([0 1])
 
 %     hold on
 %     
@@ -150,10 +151,10 @@ DF=resample(smooth(DVT2,20),length(Coord),length(DVT2));
 
 DF=DF(Corner:end-Corner);
 
-    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),50,DF,'fill')
+    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),25,DF,'fill')
     colormap('jet')
     colorbar
-    caxis([0 1])
+%    caxis([0 1])
 
 title('Dorsal Ventral coherence - T2')
 
@@ -163,10 +164,10 @@ DF=resample(smooth(VFT2,20),length(Coord),length(VFT2));
 
 DF=DF(Corner:end-Corner);
 
-    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),50,DF,'fill')
+    scatter(Coord(Corner:length(DF)+Corner-1,1),Coord(Corner:length(DF)+Corner-1,2),25,DF,'fill')
     colormap('jet')
     colorbar
-    caxis([0 1])
+%    caxis([0 1])
 
 title('Ventral mPFC coherence - T2')
 

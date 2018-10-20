@@ -74,35 +74,15 @@ PFC_ch = 4;
 VH_ch = 11;
 DH_ch = 2;
 
-[CdfC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,PFC_ch)),2000,1500,2^18,1000);
-[CdvC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,VH_ch)),2000,1500,2^18,1000);
-[CvfC,fc]=mscohere(detrend(DataCenter(:,VH_ch)),detrend(DataCenter(:,PFC_ch)),2000,1500,2^18,1000);
+[CdfC,fc]=mscohere(detrend(DataCenter(locs(1):locs(end)+50,DH_ch)),detrend(DataCenter(:,PFC_ch)),2000,1500,2^18,1000);
+[CdvC,fc]=mscohere(detrend(DataCenter(locs(1):locs(end)+50,DH_ch)),detrend(DataCenter(:,VH_ch)),2000,1500,2^18,1000);
+[CvfC,fc]=mscohere(detrend(DataCenter(locs(1):locs(end)+50,VH_ch)),detrend(DataCenter(:,PFC_ch)),2000,1500,2^18,1000);
 
-[CdfB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,PFC_ch)),2000,1500,2^18,1000);
-[CdvB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,VH_ch)),2000,1500,2^18,1000);
-[CvfB,fb]=mscohere(detrend(DataBorder(:,VH_ch)),detrend(DataBorder(:,PFC_ch)),2000,1500,2^18,1000);
+[CdfB,fb]=mscohere(detrend(DataBorder(locs(1):locs(end)+50,DH_ch)),detrend(DataBorder(:,PFC_ch)),2000,1500,2^18,1000);
+[CdvB,fb]=mscohere(detrend(DataBorder(locs(1):locs(end)+50,DH_ch)),detrend(DataBorder(:,VH_ch)),2000,1500,2^18,1000);
+[CvfB,fb]=mscohere(detrend(DataBorder(locs(1):locs(end)+50,VH_ch)),detrend(DataBorder(:,PFC_ch)),2000,1500,2^18,1000);
 
-%%
+figure(101)
+
 subplot(2,2,1),
-plot(fc,CdfC,'r')
-hold on
-plot(fb,CdfB,'k')
-hold off
-xlim([0 20])
-title('DH x PFC')
-
-subplot(2,2,2),
-plot(fc,CvfC,'r')
-hold on
-plot(fb,CvfB,'k')
-hold off
-xlim([0 20])
-title('VH x PFC')
-
-subplot(2,2,3),
-plot(fc,CdvC,'r')
-hold on
-plot(fb,CdvB,'k')
-hold off
-xlim([0 20])
-title('VH x DH')
+plot(fc
