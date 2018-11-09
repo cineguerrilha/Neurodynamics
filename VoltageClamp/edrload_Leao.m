@@ -25,7 +25,7 @@ if (length(l10)==length(l13))
         cnt = l13(ii)+2;
     end
 end
-
+mV=1;
 eval(char(Header{3}))
 eval(char(Header{4}))
 eval(char(Header{5}))
@@ -37,9 +37,12 @@ eval(char(Header{10}))
 eval(char(Header{11}))
 eval(char(Header{12}))
 eval(char(Header{13}))
-for ii=41:51
-eval(char(Header{ii}))
-end
+ for ii=38:38
+ eval(char(Header{ii}))
+ end
+  for ii=41:44
+ eval(char(Header{ii}))
+ end
 
 clear Header
 
@@ -86,7 +89,7 @@ end;
 end
 
 
-for ii=1:2
+for ii=1:1
     %dd=Data(2+((ii-1)*2):(ii-1)*2+2:end);
     eval(['Offset=YO',int2str(ii-1)]);
     %Offset = Offset + NC*1024;

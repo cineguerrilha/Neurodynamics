@@ -6,16 +6,16 @@
 % mouse is.
 % ID is the amount of points in the y axis between ea channel
 
-ID=1000;
+ID=2000;
 samples=3000;
 
 global curr_point
 
 hold off
 
-ElM=[6 11 3 14 1 16 2 15 5 12 4 13 7 10 8 9];
-data=y(ElM,1:25:end);
-data=data';
+% ElM=[6 11 3 14 1 16 2 15 5 12 4 13 7 10 8 9];
+% data=y(ElM,1:25:end);
+% data=data';
 
 [m,n]=size(data);
 

@@ -1,8 +1,8 @@
 %% Run this if you have used edrloadAnnara
 %[dd, h, EDRFile, EDRPath] = edrloadAnnara;
 EDRPath=cd;
-A=dir('DMT*.EDR');
-gg=3;
+A=dir('*.EDR');
+gg=4;
 EDRFile=A(gg).name;
 [dd,t,Header,DT]=edrload_Leao(EDRFile);
 d=dd(:,1);  % Check if the data is in channel
@@ -90,7 +90,7 @@ end
 toc
 %%
 CVec2=zeros(length(CVec),1);
-CVec2(CVec>.95)=1; % detection threshold
+CVec2(CVec>.85)=1; % detection threshold
 
 % plot(dBaseLine)
 % hold on

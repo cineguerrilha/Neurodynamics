@@ -1,6 +1,47 @@
+clear 
+close
+load Coord
+load PSD
 XX=40;
 YY=32;
-fps=20;
+plot(Coord(:,1),Coord(:,2),'.')
+
+%%
+% deu Errado, se nao deu pula
+gg=ginput(2);
+xMin=gg(1,1);
+xMax=gg(2,1);
+
+yMax=gg(1,2);
+yMin=gg(2,2);
+
+for ii=1:length(Coord)
+    if Coord(ii,1)<xMin
+        Coord(ii,1)=xMin;
+    end
+    if Coord(ii,1)>xMax
+        Coord(ii,1)=xMax;
+    end
+    
+    if Coord(ii,2)<yMin
+        Coord(ii,2)=yMin;
+    end
+    if Coord(ii,2)>yMax
+        Coord(ii,2)=yMax;
+    end
+end
+plot(Coord(:,1),Coord(:,2),'.')
+%%
+
+% XNeg=find(Coord(:,1)<0);
+% if not(isempty(XNeg))
+% Coord(XNeg,:)=1;
+% end
+% 
+% YNeg=find(Coord(:,2)<0);
+% if not(isempty(YNeg))
+% Coord(YNeg,:)=1;
+% end
 
 XBound=max(Coord(:,1));
 YBound=max(Coord(:,2));
@@ -21,14 +62,14 @@ InOut=zeros(length(CoordCM_X),1);
 for ii=1:length(CoordCM_X)
     if (CoordCM_X(ii)>xL & CoordCM_X(ii)<xR) & (CoordCM_Y(ii)>yT & CoordCM_Y(ii)<yB)
         Center(ii)=1;
-        if ii>1 & ii<length(CoordCM_X)
-            if Center(ii-1)==0 | Center(ii-2)==0
-                InOut(ii)=1; % Animal is entering center
-            end
+        if ii>1 & ii<(length(CoordCM_X)+2)
+%             if Center(ii-1)==0 | Center(ii-2)==0
+%                 InOut(ii,1)=1; % Animal is entering center
+%             end
             
-            if not((CoordCM_X(ii+1)>xL & CoordCM_X(ii+1)<xR) & (CoordCM_Y(ii+1)>yT & CoordCM_Y(ii+1)<yB) | (CoordCM_X(ii+2)>xL & CoordCM_X(ii+2)<xR) & (CoordCM_Y(ii+2)>yT & CoordCM_Y(ii+2)<yB))
-                InOut(ii)=2;
-            end
+%             if not((CoordCM_X(ii+1)>xL & CoordCM_X(ii+1)<xR) & (CoordCM_Y(ii+1)>yT & CoordCM_Y(ii+1)<yB) | (CoordCM_X(ii+2)>xL & CoordCM_X(ii+2)<xR) & (CoordCM_Y(ii+2)>yT & CoordCM_Y(ii+2)<yB))
+%                 InOut(ii,1)=2;
+%             end
         end
     end
 end
@@ -42,8 +83,6 @@ plot(CoordCM_X(Center==0),CoordCM_Y(Center==0),'LineStyle','none','Marker','o','
 
 hold off
 
-%%
-% First points
 hold on
 gg=find(Center==1);
 for ii=1700:1850
@@ -59,29 +98,44 @@ DataCenter(1,1:16)=0;
 tVideoKwik=locs(end)+50-locs(1);
 disp('Inter frame interval');
 1/(length(Center)/(tVideoKwik))
-for ii=1:length(Center)
-    I1=(ii-1)*10+1;
-    I2=ii*10;
+
+cntCenter=1;
+cntBorder=1;
+SamplesPerFrame=10;
+
+DataBorder=zeros(length(find(Center==0)),16);
+DataCenter=zeros(length(find(Center==1)),16);
+
+for ii=1:round(length(DataFilm)/SamplesPerFrame)
+    I1=(ii-1)*SamplesPerFrame+1;
+    I2=ii*SamplesPerFrame;
     if (Center(ii)==0)
-        DataBorder=[DataBorder;DataFilm(I1:I2,:)];
+        if (cntBorder*SamplesPerFrame)<=length(DataBorder)
+        DataBorder((cntBorder-1)*SamplesPerFrame+1:cntBorder*SamplesPerFrame,:)=DataFilm(I1:I2,:);
+        cntBorder=cntBorder+1;
+        end
     else
-        DataCenter=[DataCenter;DataFilm(I1:I2,:)];
+        if (cntCenter*SamplesPerFrame)<=length(DataCenter)
+        DataCenter((cntCenter-1)*SamplesPerFrame+1:cntCenter*SamplesPerFrame,:)=DataFilm(I1:I2,:);
+        cntCenter=cntCenter+1;
+        end
     end
 end
 %%
 
 PFC_ch = 4;
-VH_ch = 11;
-DH_ch = 2;
+VH_ch = 12;
+DH_ch = 16;
 
-[CdfC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,PFC_ch)),2000,1500,2^18,1000);
-[CdvC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,VH_ch)),2000,1500,2^18,1000);
-[CvfC,fc]=mscohere(detrend(DataCenter(:,VH_ch)),detrend(DataCenter(:,PFC_ch)),2000,1500,2^18,1000);
+[CdfC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,PFC_ch)),1000,800,2^18,1000);
+[CdvC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,VH_ch)),1000,800,2^18,1000);
+[CvfC,fc]=mscohere(detrend(DataCenter(:,VH_ch)),detrend(DataCenter(:,PFC_ch)),1000,800,2^18,1000);
 
-[CdfB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,PFC_ch)),2000,1500,2^18,1000);
-[CdvB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,VH_ch)),2000,1500,2^18,1000);
-[CvfB,fb]=mscohere(detrend(DataBorder(:,VH_ch)),detrend(DataBorder(:,PFC_ch)),2000,1500,2^18,1000);
+[CdfB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,PFC_ch)),1000,800,2^18,1000);
+[CdvB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,VH_ch)),1000,800,2^18,1000);
+[CvfB,fb]=mscohere(detrend(DataBorder(:,VH_ch)),detrend(DataBorder(:,PFC_ch)),1000,800,2^18,1000);
 
+save CoherenceCenterBorder CdfC CdvC CvfC fc CdfB CdvB CvfB fb PFC_ch VH_ch DH_ch
 %%
 subplot(2,2,1),
 plot(fc,CdfC,'r')

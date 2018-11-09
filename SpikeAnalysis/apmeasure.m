@@ -3,7 +3,7 @@ function [ap, apf]=apmeasure(d,t)
 dd=find(d==max(d));
 dd=dd(1);
 
-ap=d(dd-150:dd+1000)-d(dd-150);
+ap=d(dd-150:dd+500)-d(dd-150);
 
 %t=0:si/1000:(length(ap)-1)*si/1000;
 dV=integrateAP(ap);
