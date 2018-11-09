@@ -119,4 +119,4 @@ for ii=1:obj.NumberOfFrames
 end
 
 plot(Coord(:,1),Coord(:,2))
-save([filename(1:end-4),'_Coord'],'Coord');
+save([filename(1:end-4),'_Coord'],'Coord','EPM_video');
