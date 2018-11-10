@@ -1,7 +1,7 @@
 % Coherence and coordinate
 PFC_ch = 4;
-VH_ch = 11;
-DH_ch = 1;
+VH_ch = 10;
+DH_ch = 2;
 [pks,locs]=findpeaks(aux1000);
 
 ChannelsReg = [PFC_ch VH_ch DH_ch];

@@ -2,7 +2,7 @@
 %[dd, h, EDRFile, EDRPath] = edrloadAnnara;
 EDRPath=cd;
 A=dir('*.EDR');
-gg=4;
+gg=8;
 EDRFile=A(gg).name;
 [dd,t,Header,DT]=edrload_Leao(EDRFile);
 d=dd(:,1);  % Check if the data is in channel
@@ -60,8 +60,8 @@ plot(SEv)
 
 title('click at the beginning of the event')
 g2=ginput(1);
-plot(SEv(round(g2(1,1)):end))
-SEvFit=SEv(round(g2(1,1)):end);
+plot(SEv(round(g2(1,1)):end)-SEv(round(g2(1,1))))
+SEvFit=SEv(round(g2(1,1)):end)-SEv(round(g2(1,1)));
 t=1:length(SEvFit);
 %%
 plot(SEvFit)
@@ -90,7 +90,7 @@ end
 toc
 %%
 CVec2=zeros(length(CVec),1);
-CVec2(CVec>.85)=1; % detection threshold
+CVec2(CVec>.9)=1; % detection threshold
 
 % plot(dBaseLine)
 % hold on
@@ -106,8 +106,8 @@ hold off
 
 %%
 clear SynEvents
-BL=100;
-EL=3000;
+BL=50;
+EL=1500;
 for ii=1:length(locs)
     if locs(ii)+EL<length(dBaseLine)
     SynEvents(:,ii)=dBaseLine(locs(ii)-BL:locs(ii)+EL);

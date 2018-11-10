@@ -123,9 +123,9 @@ for ii=1:round(length(DataFilm)/SamplesPerFrame)
 end
 %%
 
-PFC_ch = 4;
-VH_ch = 12;
-DH_ch = 16;
+PFC_ch = 5;
+VH_ch = 11;
+DH_ch = 8;
 
 [CdfC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,PFC_ch)),1000,800,2^18,1000);
 [CdvC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,VH_ch)),1000,800,2^18,1000);

@@ -48,7 +48,7 @@ imagesc(EPM_video)
 
 %level = 0.105;   %Change this to isolate the mouse
 level = 0.97;   %Change this to isolate the mouse
-NoPixel=300;  %here also
+NoPixel=200;  %here also
 
 bw = (im2bw(EPM_video,level));
 bw=  bwareaopen(bw,NoPixel);
