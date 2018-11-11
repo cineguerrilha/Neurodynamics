@@ -1,17 +1,16 @@
 %%
 %---------------------Kwik
 data = load_open_ephys_kwik('experiment1_100.raw.kwd');
-%%
+
 data1000=data{1,3}(1:16,1:30:end);
 data1000=data1000';
 t1000=[0:size(data1000,2)-1]/1000;
 h1=figure(1);
 thr=1000;
 
-%%
 
 %%
-aux1000=(data{1,3}(24,1:30:end));
+aux1000=(data{1,3}(23,1:30:end));
 aux1000(aux1000<thr)=0;
 aux1000(aux1000>thr)=1;
 [pks,locs]=findpeaks(aux1000);
@@ -40,11 +39,11 @@ for ii=1:16
 end
 
 
-%savefig(h1,'PSD.fig')
+savefig(h1,'PSD.fig')
 save PSD data1000 P f t1000 aux1000
 
 %%
-savefig(h1,'PSD.fig')
+%savefig(h1,'PSD.fig')
 %%
 % Run comodulation (adriano's) of all channels - takes a loooooong time -
 % only 1st half

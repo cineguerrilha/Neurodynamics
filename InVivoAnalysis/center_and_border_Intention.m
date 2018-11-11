@@ -83,11 +83,13 @@ plot(CoordCM_X(Center==0),CoordCM_Y(Center==0),'LineStyle','none','Marker','o','
 
 hold off
 
-hold on
-gg=find(Center==1);
-for ii=1700:1850
-    plot(CoordCM_X(gg(ii)),CoordCM_Y(gg(ii)),'m+')
-end
+% hold on
+% gg=find(Center==1);
+% for ii=1700:1850
+%     plot(CoordCM_X(gg(ii)),CoordCM_Y(gg(ii)),'m+')
+% end
+% hold off
+
 
 %%
 % Coherence border and center

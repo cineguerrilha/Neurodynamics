@@ -47,7 +47,7 @@ imagesc(EPM_video)
 %Here you set up the detection level
 
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.97;   %Change this to isolate the mouse
+level = 0.99;   %Change this to isolate the mouse
 NoPixel=200;  %here also
 
 bw = (im2bw(EPM_video,level));
@@ -120,3 +120,77 @@ end
 
 plot(Coord(:,1),Coord(:,2))
 save([filename(1:end-4),'_Coord'],'Coord','EPM_video');
+
+%%
+% Open and close time vec
+
+imagesc(EPM_video)
+hold on
+plot(Coord(:,1),Coord(:,2),'r')
+hold off
+title('Click on the center of the arena')
+aa=ginput(1);
+
+[m,n]=size(EPM_video);
+
+hold on
+plot(aa(1),[1:m],'k+')
+plot([1:n],aa(2),'k+')
+hold off
+text(aa(1)-100,aa(2)+100,'opened')
+text(aa(1)-100,aa(2)-100,'closed')
+text(aa(1)+70,aa(2)+100,'closed')
+text(aa(1)+70,aa(2)-100,'opened')
+
+Opened=zeros(length(Coord),1);
+for ii=1:length(Coord)
+    if (Coord(ii,1)<=aa(1) & Coord(ii,2)>=aa(2)) | (Coord(ii,1)>aa(1) & Coord(ii,2)<aa(2))
+        Opened(ii)=1;
+    end
+end
+
+hold on
+plot(Coord(Opened==1,1),Coord(Opened==1,2),'r+')
+plot(Coord(Opened==0,1),Coord(Opened==0,2),'k*')
+hold off
+
+%%
+
+[pks,locs]=findpeaks(aux1000);
+DataFilm=detrend(data1000(locs(1):locs(end)+50,:));
+
+auxFilm=zeros(locs(end)+50-locs(1)+1,1);
+
+
+tVideoKwik=locs(end)+50-locs(1);
+disp('Inter frame interval');
+FInt=1/(length(Opened)/(tVideoKwik))
+
+FOn=1:FInt:tVideoKwik;
+% for ii=1:length(FOn)
+%     auxFilm(round(FOn(ii)),1)=1;
+% end
+%%
+
+DataClosed=zeros(length(DataFilm),16);
+DataOpened=zeros(length(DataFilm),16);
+LastOpen=1;
+LastClose=1;
+cntClose=1;
+cntOpen=1;
+
+for ii=1:length(FOn)-1
+    if (Opened(ii)==0)
+        DataClosed(cntClose:cntClose+(round(FOn(ii+1))-round(FOn(ii))),:)=DataFilm(round(FOn(ii)):round(FOn(ii+1)),:);
+        cntClose=(round(FOn(ii+1))-round(FOn(ii)))+cntClose;
+    else
+        DataOpened(cntOpen:cntOpen+(round(FOn(ii+1))-round(FOn(ii))),:)=DataFilm(round(FOn(ii)):round(FOn(ii+1)),:);
+        cntOpen=(round(FOn(ii+1))-round(FOn(ii)))+cntOpen;
+    end
+    
+end
+
+DataOpened(cntOpen-1:end,:)=[];
+DataClosed(cntClose-1:end,:)=[];
+
+save DataOpenClose DataOpened DataClosed
