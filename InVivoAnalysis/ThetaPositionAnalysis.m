@@ -58,12 +58,14 @@ mask=~mask;
 %poly2mask
 
 %%
-%video=rgb2gray(read(obj,1));
-
+%video=rgb2gray(read(obj1));
+FirstFrame = 1700;
 %Here you set up the detection level
-
+Video=rgb2gray(read(obj,FirstFrame));
+imagesc(Video);
+%%
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.01;   %Change this to isolate the mouse
+level = 0.001;   %Change this to isolate the mouse
 NoPixel=300;  %here also
 
 video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
@@ -78,12 +80,14 @@ plot(Coord(1),Coord(2),'go')
 hold off
 
 %%
+FirstFrame = 1000;
 %Coord=zeros(obj.NumberOfFrames,2);
-Coord=zeros(20000,2);
+Coord=zeros(length(FirstFrame:obj.NumberOfFrames),2);
 DistThr=60;
 
-%for ii=1:obj.NumberOfFrames
-    for ii=1:20000
+jj=1;
+for ii=FirstFrame:obj.NumberOfFrames
+    %for ii=1:20000
     Video=rgb2gray(read(obj,ii));
     video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
     % apply polygon
@@ -99,9 +103,9 @@ DistThr=60;
     if (mean(mean(bw))<0.001)
         imagesc(video);
         disp('find the animal');
-        Coord(ii,:)=ginput(1);
+        Coord(jj,:)=ginput(1);
     else
-        Coord(ii,:)=STATS.Centroid;
+        Coord(jj,:)=STATS.Centroid;
     
 %     if ii>1
 %     D(ii-1)=pdist(Coord([ii,ii-1],:),'Euclidean');
@@ -112,30 +116,31 @@ DistThr=60;
         set(H,'FontSize',14);
         set(H,'Color','g');
         hold on
-        plot(Coord(ii,1),Coord(ii,2),'go')
+        plot(Coord(jj,1),Coord(jj,2),'go')
     
-        if ii>1
+        if jj>1
         
-            if (abs(Coord(ii,1)-xx)>DistThr | abs(Coord(ii,2)-yy)>DistThr)
+            if (abs(Coord(jj,1)-xx)>DistThr | abs(Coord(jj,2)-yy)>DistThr)
                 imagesc(video);
-                plot(Coord(ii,1),Coord(ii,2),'y+')
+                plot(Coord(jj,1),Coord(ii,2),'y+')
                 disp('abrupt change in position, find the animal');
-                Coord(ii,:)=ginput(1);
+                Coord(jj,:)=ginput(1);
             else
-                Coord(ii,:)=STATS.Centroid;
+                Coord(jj,:)=STATS.Centroid;
             end
-            D(ii-1)=sqrt((Coord(ii,1)-xx)^2+(Coord(ii,2)-yy)^2);
-            H=text(40,250,['Distance ',num2str(D(ii-1))]);
+            D(jj-1)=sqrt((Coord(jj,1)-xx)^2+(Coord(jj,2)-yy)^2);
+            H=text(40,250,['Distance ',num2str(D(jj-1))]);
             set(H,'FontSize',14);
             set(H,'Color','r');
         end
         
     end
-    xx=Coord(ii,1);
-    yy=Coord(ii,2);
+    xx=Coord(jj,1);
+    yy=Coord(jj,2);
     hold off
     drawnow
     %pause
+    jj=jj+1;
 end
 
 plot(Coord(:,1),Coord(:,2))

@@ -34,7 +34,12 @@ end
 if RECT(1)+RECT(3)>m
     RECT(3)=RECT(3)-1;
 end
+%%
 
+FirstFrame = 1700;
+
+Video=rgb2gray(read(obj,FirstFrame));
+imagesc(Video);
 %%
 % here you can select the maze
 video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
@@ -47,8 +52,8 @@ imagesc(EPM_video)
 %Here you set up the detection level
 
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.99;   %Change this to isolate the mouse
-NoPixel=200;  %here also
+level = 0.8;   %Change this to isolate the mouse
+NoPixel=150;  %here also
 
 bw = (im2bw(EPM_video,level));
 bw=  bwareaopen(bw,NoPixel);
@@ -63,8 +68,9 @@ hold off
 %%
 
 DistThr=60;
+jj=1;
 
-for ii=1:obj.NumberOfFrames
+for ii=FirstFrame:obj.NumberOfFrames
 
     Video=rgb2gray(read(obj,ii));
     video=Video(RECT(2):RECT(2)+RECT(4),RECT(1):RECT(1)+RECT(3));
@@ -79,9 +85,9 @@ for ii=1:obj.NumberOfFrames
     if (mean(mean(bw))<0.001)
         imagesc(EPM_video);
         disp('find the animal');
-        Coord(ii,:)=ginput(1);
+        Coord(jj,:)=ginput(1);
     else
-        Coord(ii,:)=STATS.Centroid;
+        Coord(jj,:)=STATS.Centroid;
     
 %     if ii>1
 %     D(ii-1)=pdist(Coord([ii,ii-1],:),'Euclidean');
@@ -92,30 +98,31 @@ for ii=1:obj.NumberOfFrames
         set(H,'FontSize',14);
         set(H,'Color','g');
         hold on
-        plot(Coord(ii,1),Coord(ii,2),'go')
+        plot(Coord(jj,1),Coord(jj,2),'go')
     
-        if ii>1
+        if jj>1
         
-            if (abs(Coord(ii,1)-xx)>DistThr | abs(Coord(ii,2)-yy)>DistThr)
+            if (abs(Coord(jj,1)-xx)>DistThr | abs(Coord(jj,2)-yy)>DistThr)
                 imagesc(video);
-                plot(Coord(ii,1),Coord(ii,2),'y+')
+                plot(Coord(jj,1),Coord(jj,2),'y+')
                 disp('abrupt change in position, find the animal');
-                Coord(ii,:)=ginput(1);
+                Coord(jj,:)=ginput(1);
             else
-                Coord(ii,:)=STATS.Centroid;
+                Coord(jj,:)=STATS.Centroid;
             end
-            D(ii-1)=sqrt((Coord(ii,1)-xx)^2+(Coord(ii,2)-yy)^2);
-            H=text(40,250,['Distance ',num2str(D(ii-1))]);
+            D(jj-1)=sqrt((Coord(jj,1)-xx)^2+(Coord(jj,2)-yy)^2);
+            H=text(40,250,['Distance ',num2str(D(jj-1))]);
             set(H,'FontSize',14);
             set(H,'Color','r');
         end
         
     end
-    xx=Coord(ii,1);
-    yy=Coord(ii,2);
+    xx=Coord(jj,1);
+    yy=Coord(jj,2);
     hold off
     drawnow
     %pause
+    jj=jj+1;
 end
 
 plot(Coord(:,1),Coord(:,2))
@@ -167,15 +174,15 @@ disp('Inter frame interval');
 FInt=1/(length(Opened)/(tVideoKwik))
 
 FOn=1:FInt:tVideoKwik;
+
 % for ii=1:length(FOn)
 %     auxFilm(round(FOn(ii)),1)=1;
 % end
-%%
+
 
 DataClosed=zeros(length(DataFilm),16);
 DataOpened=zeros(length(DataFilm),16);
-LastOpen=1;
-LastClose=1;
+
 cntClose=1;
 cntOpen=1;
 

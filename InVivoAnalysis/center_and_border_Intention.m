@@ -7,6 +7,16 @@ YY=32;
 plot(Coord(:,1),Coord(:,2),'.')
 
 %%
+for ii=1:16
+    %[P(:,ii) f]=pwelch(detrend(data1000(locs(1):locs(end)+50,ii)),2000,1500,2^17,1000);
+    subplot(4,4,ii)
+    plot(f,P(:,ii))
+    title(int2str(ii))
+    xlim([1.5 20])
+    ii
+end
+
+%%
 % deu Errado, se nao deu pula
 gg=ginput(2);
 xMin=gg(1,1);
@@ -42,6 +52,12 @@ plot(Coord(:,1),Coord(:,2),'.')
 % if not(isempty(YNeg))
 % Coord(YNeg,:)=1;
 % end
+
+XMinBound=min(Coord(:,1));
+YMinBound=min(Coord(:,2));
+
+Coord(:,1)=Coord(:,1)-XMinBound;
+Coord(:,2)=Coord(:,2)-YMinBound;
 
 XBound=max(Coord(:,1));
 YBound=max(Coord(:,2));
@@ -95,47 +111,53 @@ hold off
 % Coherence border and center
 [pks,locs]=findpeaks(aux1000);
 DataFilm=detrend(data1000(locs(1):locs(end)+50,:));
-DataBorder(1,1:16)=0;
-DataCenter(1,1:16)=0;
+
+%auxFilm=zeros(locs(end)+50-locs(1)+1,1);
+
 tVideoKwik=locs(end)+50-locs(1);
 disp('Inter frame interval');
-1/(length(Center)/(tVideoKwik))
+FInt=1/(length(Center)/(tVideoKwik))
+
+FOn=1:FInt:tVideoKwik;
+
+% for ii=1:length(FOn)
+%     auxFilm(round(FOn(ii)),1)=1;
+% end
+
+
+DataBorder=zeros(length(DataFilm),16);
+DataCenter=zeros(length(DataFilm),16);
 
 cntCenter=1;
 cntBorder=1;
-SamplesPerFrame=10;
 
-DataBorder=zeros(length(find(Center==0)),16);
-DataCenter=zeros(length(find(Center==1)),16);
-
-for ii=1:round(length(DataFilm)/SamplesPerFrame)
-    I1=(ii-1)*SamplesPerFrame+1;
-    I2=ii*SamplesPerFrame;
+for ii=1:length(FOn)-1
     if (Center(ii)==0)
-        if (cntBorder*SamplesPerFrame)<=length(DataBorder)
-        DataBorder((cntBorder-1)*SamplesPerFrame+1:cntBorder*SamplesPerFrame,:)=DataFilm(I1:I2,:);
-        cntBorder=cntBorder+1;
-        end
+        DataBorder(cntBorder:cntBorder+(round(FOn(ii+1))-round(FOn(ii))),:)=DataFilm(round(FOn(ii)):round(FOn(ii+1)),:);
+        cntBorder=(round(FOn(ii+1))-round(FOn(ii)))+cntBorder;
     else
-        if (cntCenter*SamplesPerFrame)<=length(DataCenter)
-        DataCenter((cntCenter-1)*SamplesPerFrame+1:cntCenter*SamplesPerFrame,:)=DataFilm(I1:I2,:);
-        cntCenter=cntCenter+1;
-        end
+        DataCenter(cntCenter:cntCenter+(round(FOn(ii+1))-round(FOn(ii))),:)=DataFilm(round(FOn(ii)):round(FOn(ii+1)),:);
+        cntCenter=(round(FOn(ii+1))-round(FOn(ii)))+cntCenter;
     end
+    
 end
+
+DataCenter(cntCenter-1:end,:)=[];
+DataBorder(cntBorder-1:end,:)=[];
+
 %%
 
-PFC_ch = 5;
+PFC_ch = 4;
 VH_ch = 11;
-DH_ch = 8;
+DH_ch = 1;
 
-[CdfC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,PFC_ch)),1000,800,2^18,1000);
-[CdvC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,VH_ch)),1000,800,2^18,1000);
-[CvfC,fc]=mscohere(detrend(DataCenter(:,VH_ch)),detrend(DataCenter(:,PFC_ch)),1000,800,2^18,1000);
+[CdfC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,PFC_ch)),2000,1500,2^17,1000);
+[CdvC,fc]=mscohere(detrend(DataCenter(:,DH_ch)),detrend(DataCenter(:,VH_ch)),2000,1500,2^17,1000);
+[CvfC,fc]=mscohere(detrend(DataCenter(:,VH_ch)),detrend(DataCenter(:,PFC_ch)),2000,1500,2^17,1000);
 
-[CdfB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,PFC_ch)),1000,800,2^18,1000);
-[CdvB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,VH_ch)),1000,800,2^18,1000);
-[CvfB,fb]=mscohere(detrend(DataBorder(:,VH_ch)),detrend(DataBorder(:,PFC_ch)),1000,800,2^18,1000);
+[CdfB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,PFC_ch)),2000,1500,2^17,1000);
+[CdvB,fb]=mscohere(detrend(DataBorder(:,DH_ch)),detrend(DataBorder(:,VH_ch)),2000,1500,2^17,1000);
+[CvfB,fb]=mscohere(detrend(DataBorder(:,VH_ch)),detrend(DataBorder(:,PFC_ch)),2000,1500,2^17,1000);
 
 save CoherenceCenterBorder CdfC CdvC CvfC fc CdfB CdvB CvfB fb PFC_ch VH_ch DH_ch
 %%
@@ -162,3 +184,5 @@ plot(fb,CdvB,'k')
 hold off
 xlim([0 20])
 title('VH x DH')
+
+%%
