@@ -59,7 +59,7 @@ switch ext
     case 'kwd' %continuous recordings
         data = double(h5read(filename,'/recordings/0/data'));
         %info attributes
-        info = 0;
+        %info = 0;
         
         info.sample_rate = uint64(h5readatt(filename,'/recordings/0/','sample_rate'));
         info.start_time = 1e6*h5readatt(filename,'/recordings/0/','start_time')./info.sample_rate;%in usec
