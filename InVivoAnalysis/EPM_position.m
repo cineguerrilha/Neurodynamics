@@ -36,7 +36,7 @@ if RECT(1)+RECT(3)>m
 end
 %%
 
-FirstFrame = 1700;
+FirstFrame = 1;
 
 Video=rgb2gray(read(obj,FirstFrame));
 imagesc(Video);
@@ -52,7 +52,7 @@ imagesc(EPM_video)
 %Here you set up the detection level
 
 %level = 0.105;   %Change this to isolate the mouse
-level = 0.8;   %Change this to isolate the mouse
+level = 0.9;   %Change this to isolate the mouse
 NoPixel=150;  %here also
 
 bw = (im2bw(EPM_video,level));

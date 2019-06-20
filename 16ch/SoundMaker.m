@@ -1,7 +1,7 @@
 % wav white noise script
 Fs = 88200; % Sampling frequency
 FilterFreq=[ 1000 40000 ]; % Range of frequencies for the noise
-Time = 110; % time in seconds;
+Time = 360; % time in seconds;
 Noise = rand(length(0:1/Fs:Time),1)-.5;
 [b a] = butter(4,FilterFreq/Fs);
 FiltNoise=filtfilt(b,a,Noise);
