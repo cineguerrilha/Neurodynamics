@@ -87,7 +87,7 @@ I2 = find(lags/srate*1000 > -500 & lags/srate*1000 < 500);
 I2 = setdiff(I2,I);
 
 
-% synchronyindex = max(CCG(I))/sqrt(length(fired1)*length(fired2));
+synchronyindex = max(CCG(I))/sqrt(length(fired1)*length(fired2));
 synchronyindex = max(CCG(I))/max(CCG(I2))
 
 ylabel(['Cell 1 and 2; ' ' Sync Index = ' num2str(synchronyindex)])

@@ -1,10 +1,10 @@
-TraceNo=size(ms.trace,2);
+TraceNo=size(ms.FiltTraces,2);
 
 figure(1)
 hold on
 for ii=1:TraceNo
-    plot(ms.time,ms.firing(:,ii)+(ii*.3),'r')
-    plot(ms.time,ms.trace(:,ii)+(ii*.3),'k')
+    %plot(ms.time,ms.firing(:,ii)+(ii*.3),'r')
+    plot(ms.FiltTraces(:,ii)+(ii*.3),'k')
 end
 hold off
 
@@ -23,7 +23,7 @@ for ii=1:TotNeurons;
 end
 hold off
 
-TotalTime=ms.time(end);
+TotalTime=ms.time(end)
 Edges=1:100:TotalTime;
 
 figure(3);

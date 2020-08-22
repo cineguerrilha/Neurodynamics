@@ -1,6 +1,6 @@
-function [amps, t, isi]=find_spikes(d,si);
+function [amps, t, isi]=find_spikes(d,si)
 
-time=(1:length(d))*(si*1e-6);
+time=(1:length(d))*(si);
 
 plot(time,d)
 

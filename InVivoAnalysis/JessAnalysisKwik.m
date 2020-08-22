@@ -20,6 +20,8 @@ end
 aux1000=(data{1,3}(24,1:30:end));
 aux1000(aux1000<thr)=0;
 aux1000(aux1000>thr)=1;
+
+%%
 [pks,locs]=findpeaks(aux1000);
 
 
@@ -37,7 +39,7 @@ end
 %%
 
 for ii=1:16
-    [P(:,ii) f]=pwelch(detrend(data1000(locs(1):locs(end)+30,ii)),2000,1500,2^17,1000);
+    [P(:,ii) f]=pwelch(detrend(data1000(locs(1):locs(length(locs))+30,ii)),2000,1500,2^17,1000);
     subplot(4,4,ii)
     plot(f,P(:,ii))
     title(int2str(ii))
@@ -51,6 +53,16 @@ save PSD data1000 P f t1000 aux1000
 
 %%
 %savefig(h1,'PSD.fig')
+%%
+
+for ii=1:16
+    subplot(4,4,ii)
+    plot(f,P(:,ii))
+    title(int2str(ii))
+    xlim([2 20])
+    ii
+end
+
 %%
 % Run comodulation (adriano's) of all channels - takes a loooooong time -
 % only 1st half
