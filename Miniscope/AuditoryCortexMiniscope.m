@@ -128,7 +128,16 @@ file_names={'C:\Users\richardson\Desktop\MiniscopeSom\AC\a2\cellReg\ctrSFP.mat' 
         
 %%
 Im1=(ms.SFPs(:,:,1));
-for ii=2:size(ms.firing,2)
+for ii=2:ms.numNeurons
     Im1=Im1+ms.SFPs(:,:,ii);
 end
 imagesc(Im1)
+
+%%
+Traces=ms.FiltTraces(:,GoodTraces==1);
+hold on
+for ii=1:size(Traces,2)
+    plot(ms.time/1000,Traces(:,ii)+ii*2,'k');
+end
+hold off
+axis tight

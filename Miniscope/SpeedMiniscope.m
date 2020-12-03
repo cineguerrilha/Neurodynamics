@@ -1,7 +1,7 @@
 %%
 % this part is for files without the speed file
 SpeedVecUppsala;
-FirstFrame=200;
+FirstFrame=300;
 AngSpeedResampled=V;
 CCount=0:length(AngSpeedResampled)-FirstFrame;
 TVec=[-ones(FirstFrame-1,1);CCount'];
