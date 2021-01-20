@@ -38,14 +38,27 @@ if Condition=='dist'
                     y2=TrackCSV(Lines, 3+((jj-1)*3));
                     D(Lines,cnt)=sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
                 end
+                thr_D(cnt)=X(ii,jj);
                 cnt=cnt+1;
             end
         end
     end
     TimeVec = 0;
-    FrameNo=0;
-    Out=D;
+    Out.D=D;
+    Out.CSV = TrackCSV;
+    DistColumns = size(D,2);
+    cnt=1;
+    for Lines=1:length(D)
+        for ii=1:DistColumns
+            Conditions(ii)=D(Lines,ii)<thr_D(ii);
+        end
+        if sum(Conditions)==DistColumns
+            FrameNo(cnt)=Lines;
+            cnt=cnt+1;
+        end
+    end
 end
+
 if Condition=='prob'
     N=length(X);
     TrackPoints=size(TrackCSV,1);
