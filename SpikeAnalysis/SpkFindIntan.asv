@@ -1,6 +1,6 @@
 %%
 
-FN='20210116_210116';
+FN='nic';
 files=dir([FN,'*.int'])
 
 OutDir=['spk/',FN];
@@ -46,9 +46,6 @@ for ii=1:FNo
     fprintf(fid,[files(ii).name,'\n']);
 end
 fclose(fid)
-%%
-Get_spikes
-Do_clustering
 %%
 
 FN='ms2*';
