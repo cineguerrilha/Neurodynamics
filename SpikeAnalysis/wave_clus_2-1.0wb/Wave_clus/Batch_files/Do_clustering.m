@@ -348,7 +348,7 @@ for k=1:length(files)
     else       
         set(gcf,'papertype','usletter','paperorientation','portrait','paperunits','inches')
         set(gcf,'paperposition',[.25 .25 10.5 7.8])
-        eval(['print -djpeg fig2print_' char(file_to_cluster)]);
+        eval(['print -djpeg fig2print_' char(file_to_cluster) '.jpg']);
     end
         
     %SAVE FILES

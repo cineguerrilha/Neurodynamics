@@ -1,6 +1,6 @@
 %%
 
-FN='20210116_210116';
+FN='animal2_210116';
 files=dir([FN,'*.int'])
 
 OutDir=['spk/',FN];
@@ -15,7 +15,8 @@ for jj=1:FNo
     
     [t,amps,y,aux] = read_intan_data_leao(files(jj).name);
     files(1).name
-for ii=1:16
+    ChannelNo=size(y,1);
+for ii=1:ChannelNo
     
     dd=eegfilt(double(y(ii,1:100000)),25000,500,3000);
     plot(dd(2000:99000))
