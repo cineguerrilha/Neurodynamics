@@ -1,13 +1,12 @@
 %%
 
-FN='animal2_210116';
+FN='square';
 files=dir([FN,'*.int'])
 
 OutDir=['spk/',FN];
 mkdir(OutDir);
 
 %%
-
 
 FNo=numel(files);
 
